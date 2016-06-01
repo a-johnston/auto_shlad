@@ -5,7 +5,7 @@ def auto_shlad(target):
     print("init auto_shlad: %s" % target)
 
     data = {
-        'email': 'shl@d',
+        'email': target,
         'origin':'djankgo'
     }
 
